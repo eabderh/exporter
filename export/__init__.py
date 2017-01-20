@@ -1,7 +1,5 @@
 
-#from top import *
-from . import top
-from . import mod
-#import .top
-#import .mod
+#from .core import *
+#from .extend import *
+from . import interface
 

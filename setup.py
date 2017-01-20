@@ -7,7 +7,7 @@ def fromfile(path):
 
 setup(
     # basic
-    name='export',
+    name='exporter',
     version='0.1.0',
     description='Export variables, dictionaries, modules, etc, to other modules/runtimes',
     long_description=fromfile('README.md'),

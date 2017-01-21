@@ -1,6 +1,11 @@
 
-from .service import Exporter
+from . import interface
 
-export = Exporter().top()
-exp = export.duck
+export = interface.Exporter().top()
+exp = export.type
+
+
+
+
+
 

@@ -52,7 +52,7 @@ class Exporter:
 
     # PROCESSORS --------------------------------------------------------------
 
-    @frameDecorator
+    val = frameDecorator(globalize)
     def val(frame, key, val):
         globalize(frame, key, val)
 

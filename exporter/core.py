@@ -2,10 +2,11 @@
 
 import sys
 from inspect import getouterframes
+from collections import namedtuple
 
+from . import globalize
 
-def globalize(frame, key, val):
-    frame.f_globals[key] = val
+#globalize = namedtuple('globalize', ['dict', 'key'])
 
 
 # FRAME INIT ------------------------------------------------------------------
@@ -32,6 +33,7 @@ def frameDecorator(processor):
     def framer(self, *args):
         with SetFrame(self.frame_num) as frame:
             processor(frame, *args)
+        return self
     return framer
 
 
@@ -45,6 +47,7 @@ class Exporter:
     # PUBLIC ------------------------------------------------------------------
 
     def __init__(self, *frame_num):
+        self.frame_num = self.TOP
         if frame_num:
             (self.frame_num,) = frame_num
 
@@ -63,10 +66,11 @@ class Exporter:
 
     # PROCESSORS --------------------------------------------------------------
 
-    val = frameDecorator(globalize)
-    def val(frame, key, val):
-        globalize(frame, key, val)
+    #val = frameDecorator(globalize)
+    #def val(frame, key, val):
+    #    globalize(frame, key, val)
 
-
+    val = frameDecorator(globalize.val)
+    dict = frameDecorator(globalize.dict)
 
 

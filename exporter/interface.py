@@ -42,15 +42,6 @@ def process_instance(frame, instance):
 class Exporter(core.Exporter):
 
     # PUBLIC ------------------------------------------------------------------
-    def top(self):
-        self.frame_num = Exporter.TOP
-        return self
-    def current(self):
-        self.frame_num = Exporter.CURRENT
-        return self
-    def calling(self):
-        self.frame_num = Exporter.CALLING
-        return self
 
     # PROCESSORS --------------------------------------------------------------
 

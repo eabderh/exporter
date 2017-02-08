@@ -47,8 +47,19 @@ class Exporter:
     def __init__(self, *frame_num):
         if frame_num:
             (self.frame_num,) = frame_num
-    def frame(self, frame_num):
+
+    def setframe(self, frame_num):
         self.frame_num = frame_num
+        return self
+    def top(self):
+        self.frame_num = self.TOP
+        return self
+    def current(self):
+        self.frame_num = self.CURRENT
+        return self
+    def calling(self):
+        self.frame_num = self.CALLING
+        return self
 
     # PROCESSORS --------------------------------------------------------------
 

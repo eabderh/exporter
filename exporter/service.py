@@ -1,11 +1,7 @@
 
-from . import interface
+from .core import Export
 
-export = interface.Exporter().top()
-exp = export.type
-
-
-
+export = Export().top()
 
 
 

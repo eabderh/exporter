@@ -39,7 +39,7 @@ def frameDecorator(processor):
 
 # EXPORTER CLASS --------------------------------------------------------------
 
-class Exporter:
+class Export:
     CURRENT = 2
     CALLING = 3
     TOP     = -1

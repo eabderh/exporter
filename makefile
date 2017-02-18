@@ -5,7 +5,7 @@ pip = /usr/local/bin/pip
 default: dev
 
 dev:
-	$(pip) install --user --upgrade -editable .
+	$(pip) install --user --upgrade -e .
 install:
 	$(pip) install --user --upgrade .
 uninstall:

@@ -1,13 +1,8 @@
 
 
 import sys
-from inspect import getouterframes
-from collections import namedtuple
-
-from . import globalize
-
-#globalize = namedtuple('globalize', ['dict', 'key'])
-
+import inspect
+import types
 
 # FRAME INIT ------------------------------------------------------------------
 
@@ -20,7 +15,7 @@ class SetFrame:
             self.frame      = sys._getframe(frame_num)
         else:
             frame_current   = sys._getframe(0)
-            frame_info      = getouterframes(frame_current)[frame_num]
+            frame_info      = inspect.getouterframes(frame_current)[frame_num]
             self.frame      = frame_info[0]
         return self.frame
     def __exit__(self, type, value, traceback):
@@ -30,11 +25,27 @@ class SetFrame:
 # DECORATOR -------------------------------------------------------------------
 
 def frameDecorator(processor):
-    def framer(self, *args):
+    def _framed_processor(self, *args):
         with SetFrame(self.frame_num) as frame:
             processor(frame, *args)
-        return self
-    return framer
+    return _framed_processor
+
+# PROCESSORS ------------------------------------------------------------------
+
+def process_val(frame, key, val):
+    frame.f_globals[key] = val
+
+def process_dict(frame, dictionary):
+    frame.f_globals.update(dictionary)
+
+def process_module(frame, module):
+    for (key, val) in module.__dict__.items():
+        if isValidPair(key, val):
+            frame.f_globals[key] = val
+
+def isValidPair(key, val):
+    return not key.startswith('__') and type(val) is not types.ModuleType
+
 
 
 # EXPORTER CLASS --------------------------------------------------------------
@@ -64,13 +75,51 @@ class Export:
         self.frame_num = self.CALLING
         return self
 
-    # PROCESSORS --------------------------------------------------------------
 
-    #val = frameDecorator(globalize)
-    #def val(frame, key, val):
-    #    globalize(frame, key, val)
+    # PUBLIC METHODS ----------------------------------------------------------
 
-    val = frameDecorator(globalize.val)
-    dict = frameDecorator(globalize.dict)
+    @frameDecorator
+    def val(*args):
+        process_val(*args)
+
+    @frameDecorator
+    def dict(*args):
+        process_dict(*args)
+
+    @frameDecorator
+    def module(*args):
+        process_module(*args)
+
+    @frameDecorator
+    def duck(frame, *args):
+        try:
+            return process_val(frame, *args)
+        except:
+            pass
+        try:
+            return process_dict(frame, *args)
+        except:
+            pass
+        try:
+            return process_module(frame, *args)
+        except:
+            pass
+
+    @frameDecorator
+    def type(frame, *args):
+        if len(args) is 2:
+            process_val(frame, *args)
+        elif len(args) is 1:
+            (data,) = args
+            if isinstance(data, dict):
+                process_dict(frame, data)
+            elif isinstance(data, types.ModuleType):
+                process_module(frame, data)
+
+
+
+
+
+
 
 

@@ -14,7 +14,7 @@ export = Export()
 export.top().val('a',123)
 
 # export to the calling function the variable names and corresponding values.
-export.top().val({'a':123, 'b':321})
+export.calling().val({'a':123, 'b':321})
 ```
 
 
